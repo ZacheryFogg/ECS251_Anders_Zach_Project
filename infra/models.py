@@ -70,7 +70,8 @@ class LinearModel(nn.Module):
 
     def forward(self, x):
         return self.classifier(x)
-    
+
+# TODO implement a larger model like ResNet and a large ViT
 available_models = {
     "small_cnn": SmallCNN,
     "medium_cnn": MediumCNN,
