@@ -1,0 +1,28 @@
+# Quick Data Loading Test
+# =======================
+# A small subset for fast iteration / smoke testing.
+
+experiment: data_loading
+description: "Quick smoke test of data loading benchmark"
+
+matrix:
+  batch_size: [64, 256]
+  num_workers: [0, 2]
+  pin_memory: [true, false]
+  model: ["small_cnn"]
+
+fixed:
+  dataset: mnist
+  epochs: 1
+  warmup_batches: 2
+  timed_batches: 10
+  device: "cpu"
+  use_compile: false
+  repetitions: 1
+
+profiling:
+  python_timing: true
+  nsight: false
+
+output:
+  csv: "results/csv/data_loading_quick.csv"

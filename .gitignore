@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Results (generated)
+results/csv/
+results/nsight/
+results/figures/
+
+# Datasets (downloaded by torchvision)
+data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Nsight
+*.nsys-rep
+*.sqlite
+*.qdstrm
+
+
+tests
+notebooks
