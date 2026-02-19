@@ -60,33 +60,21 @@ class LargeCNN(nn.Module):
         return self.classifier(self.features(x))
 
 
-class LinearModel(nn.Module):
-    
-    def __init__(self):
-        super().__init__()
-        self.classifier = nn.Sequential(
-            nn.Flatten(), nn.Linear(28 * 28, 10),
-        )
-
-    def forward(self, x):
-        return self.classifier(x)
-
-# TODO implement a larger model like ResNet and a large ViT
 available_models = {
     "small_cnn": SmallCNN,
     "medium_cnn": MediumCNN,
     "large_cnn": LargeCNN,
-    "linear": LinearModel,
 }
 
-
-def get_model(name, device="cpu", compile=False):
-
-    model = available_models[name]().to(device).eval()
+"""
+Takes in name of model, returns pytorch model. Optionally compiles and moves to device 
+"""
+def get_model(name, device: str | torch.device = "cpu", compile: bool = False, training: bool = False):
+    model = available_models[name]().to(device)
+    if training:
+        model.train()
+    else:
+        model.eval()
     if compile:
         model = torch.compile(model)
     return model
-
-
-def count_parameters(model):
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)

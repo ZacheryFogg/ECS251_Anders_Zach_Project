@@ -1,0 +1,24 @@
+
+# Profiles a full training loop (forward + backward + optimizer) on GPU.
+# Usage: PYTHONNOUSERSITE=1 conda run -n ecs251 python scripts/run_experiment.py  --config configs/training_nsight.yaml
+
+experiment: training
+
+matrix:
+  model: ["small_cnn"]
+  batch_size: [64]
+  num_workers: [0, 2]
+  pin_memory: [true, false]
+
+fixed:
+  warmup_batches: 3
+  timed_batches: 30
+  device: "cuda:0"
+  use_compile: false
+  repetitions: 1
+
+profiling:
+  nsight: true
+
+output:
+  nsight_dir: "results/nsight"
