@@ -16,6 +16,7 @@ class ExperimentConfig:
     experiment: str = "unnamed"
 
     model: str = "small_cnn"
+    dataset: str = "cifar10"
     batch_size: int = 64
     num_workers: int = 0
     pin_memory: bool = False

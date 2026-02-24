@@ -1,0 +1,34 @@
+
+# Data loading experiment: how does num_workers affect training throughput
+# across different model sizes and batch sizes?
+#
+# Hypothesis: small models benefit more from multiple workers (GPU finishes
+# fast, so it's starved for data), while large models hide data-loading
+# latency behind long forward/backward passes.
+#
+# 4 models x 5 worker counts x 4 batch sizes = 80 experiments
+# Each: 500 timed batches x 3 repetitions
+#
+# Usage: PYTHONNOUSERSITE=1 conda run -n ecs251 python scripts/run_experiment.py --config configs/dataload_workers.yaml
+
+experiment: dataload_workers_v2
+
+matrix:
+  model: ["small_cnn", "resnet18", "resnet50", "resnet152"]
+  num_workers: [0, 1, 2, 4, 8]
+  batch_size: [32, 64, 128, 256]
+
+fixed:
+  dataset: "cifar10"
+  pin_memory: true
+  device: "cuda:1"
+  use_compile: false
+  warmup_batches: 5
+  timed_batches: 500
+  repetitions: 3
+
+profiling:
+  nsight: true
+
+output:
+  nsight_dir: "results/nsight"

@@ -18,13 +18,13 @@ DEFAULT_NSIGHT_ARGS = [
 ]
 
 
-def profile_config(config, nsight_dir=None, timeout=600) -> tuple[Path | None, None]:
+def profile_config(config, nsight_dir=None, timeout=3600) -> tuple[Path | None, None]:
     """Run a benchmark under nsys profile via subprocess."""
     if not shutil.which("nsys"):
         logger.error("nsys not found on PATH. Skipping Nsight profiling.")
         return None, None
 
-    nsight_dir = Path(nsight_dir or config.nsight_dir or "results/nsight")
+    nsight_dir = Path(nsight_dir or config.nsight_dir or "results/nsight") / config.experiment
     nsight_dir.mkdir(parents=True, exist_ok=True)
 
     trace_name = f"{config.model}__bs{config.batch_size}__w{config.num_workers}__pin{config.pin_memory}"

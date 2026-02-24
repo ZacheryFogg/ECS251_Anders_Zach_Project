@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torchvision.models as tv_models
 
 
 class SmallCNN(nn.Module):
@@ -7,10 +8,10 @@ class SmallCNN(nn.Module):
     def __init__(self):
         super().__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(1, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+            nn.Conv2d(3, 8, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
             nn.Conv2d(8, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
         )
-        self.classifier = nn.Sequential(nn.Flatten(), nn.Linear(16 * 7 * 7, 10))
+        self.classifier = nn.Sequential(nn.Flatten(), nn.Linear(16 * 8 * 8, 10))
 
     def forward(self, x):
         return self.classifier(self.features(x))
@@ -21,13 +22,13 @@ class MediumCNN(nn.Module):
     def __init__(self):
         super().__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(1, 32, 3, padding=1), nn.ReLU(),
+            nn.Conv2d(3, 32, 3, padding=1), nn.ReLU(),
             nn.Conv2d(32, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
             nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(),
             nn.Conv2d(64, 64, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
         )
         self.classifier = nn.Sequential(
-            nn.Flatten(), nn.Linear(64 * 7 * 7, 128), nn.ReLU(), nn.Linear(128, 10),
+            nn.Flatten(), nn.Linear(64 * 8 * 8, 128), nn.ReLU(), nn.Linear(128, 10),
         )
 
     def forward(self, x):
@@ -39,7 +40,7 @@ class LargeCNN(nn.Module):
     def __init__(self):
         super().__init__()
         self.features = nn.Sequential(
-            nn.Conv2d(1, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(),
+            nn.Conv2d(3, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(),
             nn.Conv2d(64, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(),
             nn.MaxPool2d(2),
             nn.Conv2d(64, 128, 3, padding=1), nn.BatchNorm2d(128), nn.ReLU(),
@@ -64,6 +65,9 @@ available_models = {
     "small_cnn": SmallCNN,
     "medium_cnn": MediumCNN,
     "large_cnn": LargeCNN,
+    "resnet18": lambda: tv_models.resnet18(weights=None, num_classes=10),
+    "resnet50": lambda: tv_models.resnet50(weights=None, num_classes=10),
+    "resnet152": lambda: tv_models.resnet152(weights=None, num_classes=10),
 }
 
 """
